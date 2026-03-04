@@ -94,7 +94,7 @@ class AniListRemoteDataSource {
       id
       title {
         romaji
-      }
+      } 
       coverImage {
         large
       }
