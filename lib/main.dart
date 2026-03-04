@@ -7,11 +7,20 @@ void main() async {
 
   final datasource = AniListRemoteDataSource();
 
-  final animeList = await datasource.getTrendingAnime();
+  // Test searchAnime()
+  final searchResults = await datasource.searchAnime("Naruto");
 
-  for (var anime in animeList) {
+  print("Search Results:");
+  for (var anime in searchResults) {
     print(anime.title);
   }
+
+  // Test getAnimeDetails()
+  final animeDetails = await datasource.getAnimeDetails(16498);
+
+  print("\nAnime Details:");
+  print(animeDetails.title);
+  print(animeDetails.averageScore);
 
   runApp(const MyApp());
 }
