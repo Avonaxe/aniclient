@@ -5,5 +5,5 @@ abstract class AnimeRepository {
 
   Future<List<Anime>> searchAnime(String query);
 
-  Future<List<Anime>> getAnimeDetails(int id);
+  Future<Anime> getAnimeDetails(int id);
 }

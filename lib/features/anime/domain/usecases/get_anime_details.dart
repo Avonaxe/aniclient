@@ -6,7 +6,7 @@ class GetAnimeDetails {
 
   GetAnimeDetails(this.repository);
 
-  Future<List<Anime>> call(int id) async{
+  Future<Anime> call(int id) async{
     return await repository.getAnimeDetails(id);
   }
 }
