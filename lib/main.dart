@@ -1,28 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'features/anime/data/datasources/anilist_remote_datasource.dart';
+import 'features/anime/presentation/screens/trending_anime_screen.dart';
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-
-  final datasource = AniListRemoteDataSource();
-
-  // Test searchAnime()
-  final searchResults = await datasource.searchAnime("Naruto");
-
-  print("Search Results:");
-  for (var anime in searchResults) {
-    print(anime.title);
-  }
-
-  // Test getAnimeDetails()
-  final animeDetails = await datasource.getAnimeDetails(16498);
-
-  print("\nAnime Details:");
-  print(animeDetails.title);
-  print(animeDetails.averageScore);
-
-  runApp(const MyApp());
+void main() {
+  runApp(
+    const ProviderScope(
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -31,11 +17,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      home: Scaffold(
-        body: Center(
-          child: Text("Check terminal for API output"),
-        ),
-      ),
+      home: TrendingAnimeScreen(),
     );
   }
 }
