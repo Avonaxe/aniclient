@@ -1,3 +1,4 @@
+import 'package:aniclient/features/anime/presentation/screens/anime_details_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -12,9 +13,7 @@ class TrendingAnimeScreen extends ConsumerWidget {
     final animeAsync = ref.watch(trendingAnimeProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Trending Anime"),
-      ),
+      appBar: AppBar(title: const Text("Trending Anime")),
       body: animeAsync.when(
         data: (List<Anime> animeList) {
           return ListView.builder(
@@ -23,27 +22,26 @@ class TrendingAnimeScreen extends ConsumerWidget {
               final anime = animeList[index];
 
               return ListTile(
-                leading: Image.network(
-                  anime.coverImage,
-                  width: 50,
-                ),
+                leading: Image.network(anime.coverImage, width: 50),
                 title: Text(anime.title),
-                subtitle: Text(
-                  "Score: ${anime.averageScore ?? 'N/A'}",
-                ),
+
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => AnimeDetailsScreen(animeId: anime.id),
+                    ),
+                  );
+                },
               );
             },
           );
         },
         loading: () {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
+          return const Center(child: CircularProgressIndicator());
         },
         error: (error, stack) {
-          return Center(
-            child: Text("Error: $error"),
-          );
+          return Center(child: Text("Error: $error"));
         },
       ),
     );
