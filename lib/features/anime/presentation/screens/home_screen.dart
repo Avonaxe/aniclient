@@ -1,4 +1,5 @@
 import 'package:aniclient/features/anime/presentation/screens/anime_details_screen.dart';
+import 'package:aniclient/features/anime/presentation/widgets/anime_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -21,19 +22,7 @@ class TrendingAnimeScreen extends ConsumerWidget {
             itemBuilder: (context, index) {
               final anime = animeList[index];
 
-              return ListTile(
-                leading: Image.network(anime.coverImage, width: 50),
-                title: Text(anime.title),
-
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => AnimeDetailsScreen(animeId: anime.id),
-                    ),
-                  );
-                },
-              );
+              return AnimeCard(anime: anime);
             },
           );
         },
