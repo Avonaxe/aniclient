@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'features/anime/presentation/screens/home_screen.dart';
+import 'core/theme/app_theme.dart';
+import 'main_navigation.dart';
 
 void main() {
   runApp(
@@ -18,11 +19,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorSchemeSeed: Colors.deepPurple,
-        useMaterial3: true,
-      ),
-      home: const HomeScreen(),
+      title: 'AniClient',
+      theme: AppTheme.darkTheme,
+      home: const MainNavigation(),
     );
   }
 }
