@@ -17,6 +17,7 @@ class AnimeModel extends Anime {
     super.timeUntilAiring,
     super.characters,
     super.staff,
+    super.recommendations,
   });
 
   factory AnimeModel.fromJson(Map<String, dynamic> json) {
@@ -69,6 +70,17 @@ class AnimeModel extends Anime {
       }
     }
 
+    // Parse Recommendations
+    List<AnimeModel> recs = [];
+    if (json['recommendations'] != null && json['recommendations']['nodes'] != null) {
+      final nodes = json['recommendations']['nodes'] as List;
+      for (var node in nodes) {
+        if (node['mediaRecommendation'] != null) {
+          recs.add(AnimeModel.fromJson(node['mediaRecommendation']));
+        }
+      }
+    }
+
     return AnimeModel(
       id: json['id'],
       title: json['title']['romaji'] ?? json['title']['english'] ?? '',
@@ -83,6 +95,7 @@ class AnimeModel extends Anime {
       timeUntilAiring: timeUntil,
       characters: chars,
       staff: staffList,
+      recommendations: recs,
     );
   }
 }

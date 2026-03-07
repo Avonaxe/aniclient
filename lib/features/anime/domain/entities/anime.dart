@@ -5,7 +5,6 @@ class Anime {
   final int id;
   final String title;
   final String coverImage;
-  final String coverImage;
   final String? bannerImage;
   final double? averageScore;
   final int? episodes;
@@ -16,6 +15,7 @@ class Anime {
   final int? timeUntilAiring;
   final List<AnimeCharacter> characters;
   final List<AnimeStaff> staff;
+  final List<Anime> recommendations;
 
   const Anime({
     required this.id,
@@ -31,5 +31,6 @@ class Anime {
     this.timeUntilAiring,
     this.characters = const [],
     this.staff = const [],
+    this.recommendations = const [],
   });
 }

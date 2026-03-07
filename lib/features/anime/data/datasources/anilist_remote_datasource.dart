@@ -95,6 +95,22 @@ class AniListRemoteDataSource {
             }
           }
         }
+        recommendations(sort: [RATING_DESC, ID], perPage: 10) {
+          nodes {
+            mediaRecommendation {
+              id
+              title {
+                romaji
+                english
+              }
+              coverImage {
+                large
+              }
+              averageScore
+              episodes
+            }
+          }
+        }
       }
     }
     ''';

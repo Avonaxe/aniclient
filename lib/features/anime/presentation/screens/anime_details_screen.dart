@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:aniclient/features/anime/presentation/widgets/anime_poster_card.dart';
 
 class AnimeDetailsScreen extends ConsumerWidget {
   final int animeId;
@@ -265,6 +266,30 @@ class AnimeDetailsScreen extends ConsumerWidget {
                                     ),
                                   ],
                                 ),
+                              );
+                            },
+                          ),
+                        ),
+                      ],
+
+                      // Recommendations
+                      if (anime.recommendations.isNotEmpty) ...[
+                        const SizedBox(height: 24),
+                        const Text(
+                          "Recommendations",
+                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(height: 12),
+                        SizedBox(
+                          height: 250,
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: anime.recommendations.length,
+                            itemBuilder: (context, index) {
+                              final recAnime = anime.recommendations[index];
+                              return AnimePosterCard(
+                                anime: recAnime,
+                                heroTagContext: 'rec_details_${anime.id}',
                               );
                             },
                           ),
