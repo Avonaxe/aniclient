@@ -5,6 +5,10 @@ import 'package:app_links/app_links.dart';
 import 'features/auth/presentation/providers/auth_providers.dart';
 import 'features/auth/presentation/screens/login_screen.dart';
 
+import 'features/anime/presentation/screens/home_screen.dart';
+import 'features/anime/presentation/screens/search_screen.dart';
+import 'features/profile/presentation/screens/profile_screen.dart';
+
 class MainNavigation extends ConsumerStatefulWidget {
   const MainNavigation({super.key});
 
@@ -35,10 +39,10 @@ class _MainNavigationState extends ConsumerState<MainNavigation> {
 
   // The actual screens to show when authenticated
   final List<Widget> _screens = [
-    const Center(child: Text("Home")), // Replace with HomeScreen later
-    const Center(child: Text("Search")), // Replace with SearchScreen later
+    const HomeScreen(),
+    const SearchScreen(),
     const Center(child: Text("Library")), // Replace with LibraryScreen later
-    const Center(child: Text("Profile")), // Replace with ProfileScreen later
+    const ProfileScreen(),
   ];
 
   @override
