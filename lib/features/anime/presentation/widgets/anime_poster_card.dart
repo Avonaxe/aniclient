@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../../domain/entities/anime.dart';
 import '../screens/anime_details_screen.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:shimmer/shimmer.dart';
 
 class AnimePosterCard extends StatelessWidget {
   final Anime anime;
@@ -41,26 +43,26 @@ class AnimePosterCard extends StatelessWidget {
                 tag: 'anime_poster_${anime.id}_$heroTagContext',
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(8),
-                  child: Image.network(
-                    anime.coverImage,
+                  child: CachedNetworkImage(
+                    imageUrl: anime.coverImage,
                     height: 180,
                     width: 120,
                     fit: BoxFit.cover,
-                    loadingBuilder: (context, child, loadingProgress) {
-                      if (loadingProgress == null) return child;
-                      return SizedBox(
+                    placeholder: (context, url) => Shimmer.fromColors(
+                      baseColor: const Color(0xFF2B2D42),
+                      highlightColor: const Color(0xFF3F4156),
+                      child: Container(
                         height: 180,
                         width: 120,
-                        child: Center(
-                          child: CircularProgressIndicator(
-                            value: loadingProgress.expectedTotalBytes != null
-                                ? loadingProgress.cumulativeBytesLoaded /
-                                    (loadingProgress.expectedTotalBytes ?? 1)
-                                : null,
-                          ),
-                        ),
-                      );
-                    },
+                        color: Colors.white,
+                      ),
+                    ),
+                    errorWidget: (context, url, error) => Container(
+                      height: 180,
+                      width: 120,
+                      color: const Color(0xFF2B2D42),
+                      child: const Icon(Icons.error, color: Colors.white54),
+                    ),
                   ),
                 ),
               ),

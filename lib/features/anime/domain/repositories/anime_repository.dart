@@ -12,4 +12,6 @@ abstract class AnimeRepository {
   Future<List<Anime>> getTopRatedAnime();
 
   Future<List<Anime>> getAiringAnime();
+
+  Future<List<Anime>> getSeasonalAnime();
 }

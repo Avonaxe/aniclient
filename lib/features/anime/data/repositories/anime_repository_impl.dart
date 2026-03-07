@@ -37,4 +37,9 @@ class AnimeRepositoryImpl implements AnimeRepository {
   Future<List<Anime>> getAiringAnime() async {
     return await remoteDataSource.getAiringAnime();
   }
+
+  @override
+  Future<List<Anime>> getSeasonalAnime() async {
+    return await remoteDataSource.getSeasonalAnime();
+  }
 }

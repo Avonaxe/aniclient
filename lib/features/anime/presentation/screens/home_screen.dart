@@ -12,6 +12,7 @@ class HomeScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final trendingAsync = ref.watch(trendingAnimeProvider);
     final popularAsync = ref.watch(popularAnimeProvider);
+    final upcomingAsync = ref.watch(seasonalAnimeProvider);
     final topRatedAsync = ref.watch(topRatedAnimeProvider);
     final airingAsync = ref.watch(airingAnimeProvider);
 
@@ -35,6 +36,9 @@ class HomeScreen extends ConsumerWidget {
           ),
           SliverToBoxAdapter(
             child: _buildSection("Trending Now", trendingAsync, "trending"),
+          ),
+          SliverToBoxAdapter(
+            child: _buildSection("Seasonal Releases", upcomingAsync, "seasonal"),
           ),
           SliverToBoxAdapter(
             child: _buildSection("Popular This Season", popularAsync, "popular"),
@@ -86,8 +90,43 @@ class HomeScreen extends ConsumerWidget {
                 },
               );
             },
-            loading: () => const Center(child: CircularProgressIndicator()),
-            error: (error, stack) => Center(child: Text("Error loading section")),
+            loading: () => ListView.builder(
+              scrollDirection: Axis.horizontal,
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              itemCount: 5,
+              itemBuilder: (context, index) {
+                return Container(
+                  width: 120,
+                  margin: const EdgeInsets.only(right: 12),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        height: 180,
+                        width: 120,
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF2B2D42),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Container(
+                        height: 14,
+                        width: 100,
+                        color: const Color(0xFF2B2D42),
+                      ),
+                      const SizedBox(height: 4),
+                      Container(
+                        height: 12,
+                        width: 40,
+                        color: const Color(0xFF2B2D42),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+            error: (error, stack) => const Center(child: Text("Error loading section")),
           ),
         ),
       ],

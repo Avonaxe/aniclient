@@ -1,128 +1,106 @@
-import 'dart:convert';
-import 'package:http/http.dart' as http;
-
 import '../models/anime_model.dart';
+import '../../../../core/network/graphql_client.dart';
 
 class AniListRemoteDataSource {
-  static const String _baseUrl = "https://graphql.anilist.co";
+  final GraphQLClient client = GraphQLClient();
+
+  // Reusable fragment for common anime fields
+  static const String _animeFields = '''
+    id
+    title {
+      romaji
+      english
+    }
+    coverImage {
+      large
+    }
+    bannerImage
+    averageScore
+    episodes
+    description
+    genres
+    studios(isMain: true) {
+      nodes {
+        name
+      }
+    }
+    nextAiringEpisode {
+      episode
+      timeUntilAiring
+    }
+  ''';
+
+  Future<List<AnimeModel>> _queryAnimeList(String query, [Map<String, dynamic>? variables]) async {
+    final data = await client.query(query: query, variables: variables);
+    final List mediaList = data['Page']['media'];
+    return mediaList.map((animeJson) => AnimeModel.fromJson(animeJson)).toList();
+  }
 
   Future<List<AnimeModel>> getTrendingAnime() async {
     const query = '''
     query {
       Page(page: 1, perPage: 20) {
         media(sort: TRENDING_DESC, type: ANIME) {
-          id
-          title {
-            romaji
-          }
-          coverImage {
-            large
-          }
-          averageScore
-          episodes
-          description
+          $_animeFields
         }
       }
     }
     ''';
-
-    final response = await http.post(
-      Uri.parse(_baseUrl),
-      headers: {"Content-Type": "application/json"},
-      body: jsonEncode({"query": query}),
-    );
-
-    if (response.statusCode != 200) {
-      throw Exception("Failed to fetch trending anime");
-    }
-
-    final decoded = jsonDecode(response.body);
-
-    final List mediaList = decoded['data']['Page']['media'];
-
-    return mediaList
-        .map((animeJson) => AnimeModel.fromJson(animeJson))
-        .toList();
+    return _queryAnimeList(query);
   }
 
   Future<List<AnimeModel>> searchAnime(String queryString) async {
     const query = '''
-  query (\$search: String) {
-    Page(page: 1, perPage: 20) {
-      media(search: \$search, type: ANIME) {
-        id
-        title {
-          romaji
+    query (\$search: String) {
+      Page(page: 1, perPage: 20) {
+        media(search: \$search, type: ANIME) {
+          $_animeFields
         }
-        coverImage {
-          large
-        }
-        averageScore
-        episodes
-        description
       }
     }
-  }
-  ''';
-
-    final response = await http.post(
-      Uri.parse(_baseUrl),
-      headers: {"Content-Type": "application/json"},
-      body: jsonEncode({
-        "query": query,
-        "variables": {"search": queryString},
-      }),
-    );
-
-    if (response.statusCode != 200) {
-      throw Exception("Failed to search anime");
-    }
-
-    final decoded = jsonDecode(response.body);
-
-    final List mediaList = decoded['data']['Page']['media'];
-
-    return mediaList
-        .map((animeJson) => AnimeModel.fromJson(animeJson))
-        .toList();
+    ''';
+    return _queryAnimeList(query, {"search": queryString});
   }
 
   Future<AnimeModel> getAnimeDetails(int id) async {
     const query = '''
-  query (\$id: Int) {
-    Media(id: \$id, type: ANIME) {
-      id
-      title {
-        romaji
-      } 
-      coverImage {
-        large
+    query (\$id: Int) {
+      Media(id: \$id, type: ANIME) {
+        $_animeFields
+        characters(sort: [ROLE, RELEVANCE, ID], perPage: 10) {
+          edges {
+            role
+            node {
+              id
+              name {
+                userPreferred
+              }
+              image {
+                large
+              }
+            }
+          }
+        }
+        staff(perPage: 5) {
+          edges {
+            node {
+              id
+              name {
+                userPreferred
+              }
+              image {
+                large
+              }
+              primaryOccupations
+            }
+          }
+        }
       }
-      averageScore
-      episodes
-      description
     }
-  }
-  ''';
-
-    final response = await http.post(
-      Uri.parse(_baseUrl),
-      headers: {"Content-Type": "application/json"},
-      body: jsonEncode({
-        "query": query,
-        "variables": {"id": id},
-      }),
-    );
-
-    if (response.statusCode != 200) {
-      throw Exception("Failed to fetch anime details");
-    }
-
-    final decoded = jsonDecode(response.body);
-
-    final animeJson = decoded['data']['Media'];
-
-    return AnimeModel.fromJson(animeJson);
+    ''';
+    
+    final data = await client.query(query: query, variables: {"id": id});
+    return AnimeModel.fromJson(data['Media']);
   }
 
   Future<List<AnimeModel>> getPopularAnime() async {
@@ -130,37 +108,12 @@ class AniListRemoteDataSource {
     query {
       Page(page: 1, perPage: 20) {
         media(sort: POPULARITY_DESC, type: ANIME) {
-          id
-          title {
-            romaji
-          }
-          coverImage {
-            large
-          }
-          averageScore
-          episodes
-          description
+           $_animeFields
         }
       }
     }
     ''';
-
-    final response = await http.post(
-      Uri.parse(_baseUrl),
-      headers: {"Content-Type": "application/json"},
-      body: jsonEncode({"query": query}),
-    );
-
-    if (response.statusCode != 200) {
-      throw Exception("Failed to fetch popular anime");
-    }
-
-    final decoded = jsonDecode(response.body);
-    final List mediaList = decoded['data']['Page']['media'];
-
-    return mediaList
-        .map((animeJson) => AnimeModel.fromJson(animeJson))
-        .toList();
+    return _queryAnimeList(query);
   }
 
   Future<List<AnimeModel>> getTopRatedAnime() async {
@@ -168,37 +121,12 @@ class AniListRemoteDataSource {
     query {
       Page(page: 1, perPage: 20) {
         media(sort: SCORE_DESC, type: ANIME) {
-          id
-          title {
-            romaji
-          }
-          coverImage {
-            large
-          }
-          averageScore
-          episodes
-          description
+           $_animeFields
         }
       }
     }
     ''';
-
-    final response = await http.post(
-      Uri.parse(_baseUrl),
-      headers: {"Content-Type": "application/json"},
-      body: jsonEncode({"query": query}),
-    );
-
-    if (response.statusCode != 200) {
-      throw Exception("Failed to fetch top rated anime");
-    }
-
-    final decoded = jsonDecode(response.body);
-    final List mediaList = decoded['data']['Page']['media'];
-
-    return mediaList
-        .map((animeJson) => AnimeModel.fromJson(animeJson))
-        .toList();
+    return _queryAnimeList(query);
   }
 
   Future<List<AnimeModel>> getAiringAnime() async {
@@ -206,36 +134,26 @@ class AniListRemoteDataSource {
     query {
       Page(page: 1, perPage: 20) {
         media(status: RELEASING, sort: POPULARITY_DESC, type: ANIME) {
-          id
-          title {
-            romaji
-          }
-          coverImage {
-            large
-          }
-          averageScore
-          episodes
-          description
+           $_animeFields
         }
       }
     }
     ''';
-
-    final response = await http.post(
-      Uri.parse(_baseUrl),
-      headers: {"Content-Type": "application/json"},
-      body: jsonEncode({"query": query}),
-    );
-
-    if (response.statusCode != 200) {
-      throw Exception("Failed to fetch airing anime");
+    return _queryAnimeList(query);
+  }
+  
+  Future<List<AnimeModel>> getSeasonalAnime() async {
+    // Basic seasonal query (CURRENT season based on time is complex via GraphQL without dynamic variables)
+    // We will use a standard sort for newest starting anime
+    const query = '''
+    query {
+      Page(page: 1, perPage: 20) {
+        media(sort: START_DATE_DESC, status: RELEASING, type: ANIME) {
+           $_animeFields
+        }
+      }
     }
-
-    final decoded = jsonDecode(response.body);
-    final List mediaList = decoded['data']['Page']['media'];
-
-    return mediaList
-        .map((animeJson) => AnimeModel.fromJson(animeJson))
-        .toList();
+    ''';
+    return _queryAnimeList(query);
   }
 }
