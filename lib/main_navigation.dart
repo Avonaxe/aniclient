@@ -1,15 +1,39 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:app_links/app_links.dart';
 
-class MainNavigation extends StatefulWidget {
+import 'features/auth/presentation/providers/auth_providers.dart';
+import 'features/auth/presentation/screens/login_screen.dart';
+
+class MainNavigation extends ConsumerStatefulWidget {
   const MainNavigation({super.key});
 
   @override
-  State<MainNavigation> createState() => _MainNavigationState();
+  ConsumerState<MainNavigation> createState() => _MainNavigationState();
 }
 
-class _MainNavigationState extends State<MainNavigation> {
+class _MainNavigationState extends ConsumerState<MainNavigation> {
   int _currentIndex = 0;
+  late AppLinks _appLinks;
+  
+  @override
+  void initState() {
+    super.initState();
+    _initDeepLinks();
+  }
 
+  void _initDeepLinks() {
+    _appLinks = AppLinks();
+    
+    // Listen for uri links coming in while app is running
+    _appLinks.uriLinkStream.listen((uri) {
+      if (uri.scheme == 'aniclient' && uri.host == 'callback') {
+        ref.read(authProvider.notifier).saveTokenFromUri(uri);
+      }
+    });
+  }
+
+  // The actual screens to show when authenticated
   final List<Widget> _screens = [
     const Center(child: Text("Home")), // Replace with HomeScreen later
     const Center(child: Text("Search")), // Replace with SearchScreen later
@@ -19,6 +43,12 @@ class _MainNavigationState extends State<MainNavigation> {
 
   @override
   Widget build(BuildContext context) {
+    final isAuthenticated = ref.watch(authProvider);
+
+    if (!isAuthenticated) {
+      return const LoginScreen();
+    }
+
     return Scaffold(
       body: IndexedStack(
         index: _currentIndex,
