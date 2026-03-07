@@ -2,7 +2,10 @@ import 'package:aniclient/features/anime/data/datasources/anilist_remote_datasou
 import 'package:aniclient/features/anime/data/repositories/anime_repository_impl.dart';
 import 'package:aniclient/features/anime/domain/entities/anime.dart';
 import 'package:aniclient/features/anime/domain/repositories/anime_repository.dart';
+import 'package:aniclient/features/anime/domain/usecases/get_airing_anime.dart';
 import 'package:aniclient/features/anime/domain/usecases/get_anime_details.dart';
+import 'package:aniclient/features/anime/domain/usecases/get_popular_anime.dart';
+import 'package:aniclient/features/anime/domain/usecases/get_top_rated_anime.dart';
 import 'package:aniclient/features/anime/domain/usecases/get_trending_anime.dart';
 import 'package:aniclient/features/anime/domain/usecases/search_anime.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -21,6 +24,21 @@ final getTrendingAnimeProvider = Provider<GetTrendingAnime>((ref) {
   return GetTrendingAnime(repository);
 });
 
+final getPopularAnimeProvider = Provider<GetPopularAnime>((ref) {
+  final repository = ref.watch(repositoryProvider);
+  return GetPopularAnime(repository);
+});
+
+final getTopRatedAnimeProvider = Provider<GetTopRatedAnime>((ref) {
+  final repository = ref.watch(repositoryProvider);
+  return GetTopRatedAnime(repository);
+});
+
+final getAiringAnimeProvider = Provider<GetAiringAnime>((ref) {
+  final repository = ref.watch(repositoryProvider);
+  return GetAiringAnime(repository);
+});
+
 final searchAnimeProvider = Provider<SearchAnime>((ref) {
   final repository = ref.watch(repositoryProvider);
   return SearchAnime(repository);
@@ -33,6 +51,21 @@ final getAnimeDetailsProvider = Provider<GetAnimeDetails>((ref) {
 
 final trendingAnimeProvider = FutureProvider<List<Anime>>((ref) async {
   final usecase = ref.watch(getTrendingAnimeProvider);
+  return usecase();
+});
+
+final popularAnimeProvider = FutureProvider<List<Anime>>((ref) async {
+  final usecase = ref.watch(getPopularAnimeProvider);
+  return usecase();
+});
+
+final topRatedAnimeProvider = FutureProvider<List<Anime>>((ref) async {
+  final usecase = ref.watch(getTopRatedAnimeProvider);
+  return usecase();
+});
+
+final airingAnimeProvider = FutureProvider<List<Anime>>((ref) async {
+  final usecase = ref.watch(getAiringAnimeProvider);
   return usecase();
 });
 

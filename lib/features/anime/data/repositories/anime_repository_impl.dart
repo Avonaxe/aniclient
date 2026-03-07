@@ -22,4 +22,19 @@ class AnimeRepositoryImpl implements AnimeRepository {
   Future<Anime> getAnimeDetails(int id) async {
     return await remoteDataSource.getAnimeDetails(id);
   }
+
+  @override
+  Future<List<Anime>> getPopularAnime() async {
+    return await remoteDataSource.getPopularAnime();
+  }
+
+  @override
+  Future<List<Anime>> getTopRatedAnime() async {
+    return await remoteDataSource.getTopRatedAnime();
+  }
+
+  @override
+  Future<List<Anime>> getAiringAnime() async {
+    return await remoteDataSource.getAiringAnime();
+  }
 }
