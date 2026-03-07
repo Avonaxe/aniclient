@@ -124,43 +124,6 @@ class AniListRemoteDataSource {
 
     return AnimeModel.fromJson(animeJson);
   }
-  Future<AnimeModel> getAnimeDetails(int id) async {
-    const query = '''
-  query (\$id: Int) {
-    Media(id: \$id, type: ANIME) {
-      id
-      title {
-        romaji
-      } 
-      coverImage {
-        large
-      }
-      averageScore
-      episodes
-      description
-    }
-  }
-  ''';
-
-    final response = await http.post(
-      Uri.parse(_baseUrl),
-      headers: {"Content-Type": "application/json"},
-      body: jsonEncode({
-        "query": query,
-        "variables": {"id": id},
-      }),
-    );
-
-    if (response.statusCode != 200) {
-      throw Exception("Failed to fetch anime details");
-    }
-
-    final decoded = jsonDecode(response.body);
-
-    final animeJson = decoded['data']['Media'];
-
-    return AnimeModel.fromJson(animeJson);
-  }
 
   Future<List<AnimeModel>> getPopularAnime() async {
     const query = '''

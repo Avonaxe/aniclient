@@ -86,7 +86,8 @@ class AnimePosterCard extends StatelessWidget {
                 color: Colors.grey,
               ),
             ),
-          ],
+            ],
+          ),
         ),
       ),
     );

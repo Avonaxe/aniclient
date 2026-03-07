@@ -20,6 +20,7 @@ class AnimeCard extends StatelessWidget {
           MaterialPageRoute(
             builder: (_) => AnimeDetailsScreen(
               animeId: anime.id,
+              heroTagContext: 'search',
             ),
           ),
         );
