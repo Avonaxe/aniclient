@@ -7,6 +7,7 @@ import 'features/auth/presentation/screens/login_screen.dart';
 
 import 'features/anime/presentation/screens/home_screen.dart';
 import 'features/anime/presentation/screens/search_screen.dart';
+import 'features/library/presentation/screens/library_screen.dart';
 import 'features/profile/presentation/screens/profile_screen.dart';
 
 class MainNavigation extends ConsumerStatefulWidget {
@@ -41,7 +42,7 @@ class _MainNavigationState extends ConsumerState<MainNavigation> {
   final List<Widget> _screens = [
     const HomeScreen(),
     const SearchScreen(),
-    const Center(child: Text("Library")), // Replace with LibraryScreen later
+    const LibraryScreen(),
     const ProfileScreen(),
   ];
 
