@@ -20,61 +20,92 @@ class AnimeDetailsScreen extends ConsumerWidget {
     final animeAsync = ref.watch(animeDetailsProvider(animeId));
 
     return Scaffold(
-      appBar: AppBar(title: const Text("Anime Details")),
       body: animeAsync.when(
         data: (Anime anime) {
-          return SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Hero(
-                  tag: 'anime_poster_${anime.id}_$heroTagContext',
-                  child: Image.network(
-                    anime.coverImage,
-                    width: double.infinity,
-                    height: 300,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-
-                Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Text(
-                    anime.title,
-                    style: const TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
+          return CustomScrollView(
+            slivers: [
+              SliverAppBar(
+                expandedHeight: 300,
+                pinned: true,
+                flexibleSpace: FlexibleSpaceBar(
+                  background: Hero(
+                    tag: 'anime_poster_${anime.id}_$heroTagContext',
+                    child: Image.network(
+                      anime.coverImage,
+                      fit: BoxFit.cover,
+                      alignment: Alignment.topCenter,
                     ),
                   ),
                 ),
-
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Text("Score: ${anime.averageScore ?? "N/A"}"),
-                ),
-
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Text("Episodes: ${anime.episodes ?? "Unknown"}"),
-                ),
-
-                const SizedBox(height: 16),
-
-                Padding(
+              ),
+              SliverToBoxAdapter(
+                child: Padding(
                   padding: const EdgeInsets.all(16),
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Html(data: anime.description ?? ""),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        anime.title,
+                        style: const TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      Row(
+                        children: [
+                          const Icon(Icons.star, color: Colors.amber, size: 20),
+                          const SizedBox(width: 4),
+                          Text(
+                            "${anime.averageScore ?? 'N/A'}",
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          const SizedBox(width: 24),
+                          const Icon(Icons.tv, color: Colors.grey, size: 20),
+                          const SizedBox(width: 4),
+                          Text(
+                            "${anime.episodes ?? '?'} Episodes",
+                            style: const TextStyle(
+                              fontSize: 16,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 24),
+                      const Text(
+                        "Synopsis",
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Html(
+                        data: anime.description ?? "No description available.",
+                        style: {
+                          "body": Style(
+                            margin: Margins.zero,
+                            padding: HtmlPaddings.zero,
+                            fontSize: FontSize(16),
+                            lineHeight: LineHeight.em(1.5),
+                          ),
+                        },
+                      ),
+                      const SizedBox(height: 48), // Bottom padding
+                    ],
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           );
         },
 
-        loading: () => const Center(child: CircularProgressIndicator()),
+        loading: () => const Scaffold(body: Center(child: CircularProgressIndicator())),
 
-        error: (error, stack) => Center(child: Text("Error: $error")),
+        error: (error, stack) => Scaffold(body: Center(child: Text("Error: $error"))),
       ),
     );
   }
