@@ -6,17 +6,22 @@ class AuthRepository {
 
   // Your Client ID from AniList Developer Settings
   static const String _clientId = "36729";
-  
-  static const String _authUrl = 
-      "https://anilist.co/api/v2/oauth/authorize?client_id=$_clientId&response_type=token";
 
   Future<void> login() async {
-    final Uri url = Uri.parse(_authUrl);
-    
-    if (!await launchUrl(url, mode: LaunchMode.inAppBrowserView)) {
+    final Uri url = Uri.https(
+      'anilist.co',
+      '/api/v2/oauth/authorize',
+      {
+        'client_id': _clientId,
+        'response_type': 'token',
+      },
+    );
+
+    if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
       throw Exception("Could not launch authenticator.");
     }
   }
+
 
   Future<void> saveToken(String token) async {
     await _secureStorage.write(key: 'auth_token', value: token);

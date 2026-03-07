@@ -32,7 +32,7 @@ class _MainNavigationState extends ConsumerState<MainNavigation> {
     
     // Listen for uri links coming in while app is running
     _appLinks.uriLinkStream.listen((uri) {
-      if (uri.scheme == 'aniclient' && uri.host == 'callback') {
+      if (uri.scheme == 'com.gangesh.anilist' && uri.host == 'callback') {
         ref.read(authProvider.notifier).saveTokenFromUri(uri);
       }
     });
