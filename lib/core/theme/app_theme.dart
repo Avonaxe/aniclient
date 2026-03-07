@@ -62,6 +62,12 @@ class AppTheme {
         bodyLarge: TextStyle(color: textPrimaryColor),
         bodyMedium: TextStyle(color: textSecondaryColor),
       ),
+      pageTransitionsTheme: const PageTransitionsTheme(
+        builders: {
+          TargetPlatform.android: ZoomPageTransitionsBuilder(),
+          TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+        },
+      ),
     );
   }
 }
