@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../data/repositories/library_repository.dart';
-import '../../anime/presentation/widgets/anime_card.dart';
+import 'package:aniclient/features/library/data/repositories/library_repository.dart';
+import 'package:aniclient/features/anime/presentation/widgets/anime_card.dart';
 
 class LibraryScreen extends ConsumerWidget {
   const LibraryScreen({super.key});

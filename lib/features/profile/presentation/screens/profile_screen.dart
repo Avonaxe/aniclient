@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
-import '../../auth/presentation/providers/auth_providers.dart';
-import '../data/repositories/profile_repository.dart';
+import 'package:aniclient/features/auth/presentation/providers/auth_providers.dart';
+import 'package:aniclient/features/profile/data/repositories/profile_repository.dart';
+import 'package:aniclient/features/profile/domain/entities/user_profile.dart';
 
 class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
@@ -14,7 +15,7 @@ class ProfileScreen extends ConsumerWidget {
 
     return Scaffold(
       body: profileAsync.when(
-        data: (profile) {
+        data: (UserProfile profile) {
           return CustomScrollView(
             slivers: [
               SliverAppBar(
@@ -34,7 +35,7 @@ class ProfileScreen extends ConsumerWidget {
                         Container(color: const Color(0xFF2B2D42)),
                         
                       Container(
-                        color: const Color(0xFF141519).withOpacity(0.7),
+                        color: const Color(0xFF141519).withValues(alpha: 0.7),
                       ),
                       
                       Column(

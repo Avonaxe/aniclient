@@ -8,18 +8,22 @@ import 'package:shimmer/shimmer.dart';
 class AnimePosterCard extends StatelessWidget {
   final Anime anime;
   final String heroTagContext;
+  final double? fixedWidth;
+  final EdgeInsetsGeometry? margin;
 
   const AnimePosterCard({
     super.key,
     required this.anime,
     required this.heroTagContext,
+    this.fixedWidth,
+    this.margin,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 120,
-      margin: const EdgeInsets.only(right: 12),
+      width: fixedWidth,
+      margin: margin ?? EdgeInsets.zero,
       child: Material(
         color: Colors.transparent,
         child: InkWell(
@@ -38,30 +42,26 @@ class AnimePosterCard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Poster
-              Hero(
-                tag: 'anime_poster_${anime.id}_$heroTagContext',
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(8),
-                  child: CachedNetworkImage(
-                    imageUrl: anime.coverImage,
-                    height: 180,
-                    width: 120,
-                    fit: BoxFit.cover,
-                    placeholder: (context, url) => Shimmer.fromColors(
-                      baseColor: const Color(0xFF2B2D42),
-                      highlightColor: const Color(0xFF3F4156),
-                      child: Container(
-                        height: 180,
-                        width: 120,
-                        color: Colors.white,
+              AspectRatio(
+                aspectRatio: 0.66, // Roughly 120/180 layout
+                child: Hero(
+                  tag: 'anime_poster_${anime.id}_$heroTagContext',
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: CachedNetworkImage(
+                      imageUrl: anime.coverImage,
+                      fit: BoxFit.cover,
+                      placeholder: (context, url) => Shimmer.fromColors(
+                        baseColor: const Color(0xFF2B2D42),
+                        highlightColor: const Color(0xFF3F4156),
+                        child: Container(
+                          color: Colors.white,
+                        ),
                       ),
-                    ),
-                    errorWidget: (context, url, error) => Container(
-                      height: 180,
-                      width: 120,
-                      color: const Color(0xFF2B2D42),
-                      child: const Icon(Icons.error, color: Colors.white54),
+                      errorWidget: (context, url, error) => Container(
+                        color: const Color(0xFF2B2D42),
+                        child: const Icon(Icons.error, color: Colors.white54),
+                      ),
                     ),
                   ),
                 ),
@@ -69,25 +69,30 @@ class AnimePosterCard extends StatelessWidget {
 
               const SizedBox(height: 8),
 
-              Text(
-              anime.title,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-              style: const TextStyle(
-                fontSize: 13,
-                fontWeight: FontWeight.bold,
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      anime.title,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const Spacer(),
+                    Text(
+                      "⭐ ${anime.averageScore ?? "N/A"}",
+                      style: const TextStyle(
+                        fontSize: 12,
+                        color: Colors.grey,
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-
-            const SizedBox(height: 4),
-
-            Text(
-              "⭐ ${anime.averageScore ?? "N/A"}",
-              style: const TextStyle(
-                fontSize: 12,
-                color: Colors.grey,
-              ),
-            ),
             ],
           ),
         ),

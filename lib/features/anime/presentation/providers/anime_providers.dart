@@ -74,7 +74,7 @@ final topRatedAnimeProvider = FutureProvider<List<Anime>>((ref) async {
 
 final airingAnimeProvider = FutureProvider<List<Anime>>((ref) async {
   final useCase = ref.watch(getAiringAnimeUseCaseProvider);
-  return await useCase.execute();
+  return await useCase();
 });
 
 final seasonalAnimeProvider = FutureProvider<List<Anime>>((ref) async {

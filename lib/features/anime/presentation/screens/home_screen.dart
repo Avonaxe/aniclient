@@ -35,19 +35,19 @@ class HomeScreen extends ConsumerWidget {
             ],
           ),
           SliverToBoxAdapter(
-            child: _buildSection("Trending Now", trendingAsync, "trending"),
+            child: _buildSection(context, "Trending Now", trendingAsync, "trending"),
           ),
           SliverToBoxAdapter(
-            child: _buildSection("Seasonal Releases", upcomingAsync, "seasonal"),
+            child: _buildSection(context, "Seasonal Releases", upcomingAsync, "seasonal"),
           ),
           SliverToBoxAdapter(
-            child: _buildSection("Popular This Season", popularAsync, "popular"),
+            child: _buildSection(context, "Popular This Season", popularAsync, "popular"),
           ),
           SliverToBoxAdapter(
-            child: _buildSection("Top Rated of All Time", topRatedAsync, "top_rated"),
+            child: _buildSection(context, "Top Rated of All Time", topRatedAsync, "top_rated"),
           ),
           SliverToBoxAdapter(
-            child: _buildSection("Currently Airing", airingAsync, "airing"),
+            child: _buildSection(context, "Currently Airing", airingAsync, "airing"),
           ),
           const SliverPadding(padding: EdgeInsets.only(bottom: 24)),
         ],
@@ -56,10 +56,16 @@ class HomeScreen extends ConsumerWidget {
   }
 
   Widget _buildSection(
+    BuildContext context,
     String title,
     AsyncValue<List<dynamic>> asyncData,
     String heroContext,
   ) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    // Adapt card width to screen size, keeping it within reasonable limits
+    final cardWidth = (screenWidth * 0.32).clamp(110.0, 160.0);
+    // Aspect ratio 0.66 means height is roughly cardWidth * 1.5. Add ~85px for text lines scaling.
+    final sectionHeight = (cardWidth / 0.66) + 85;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -74,7 +80,7 @@ class HomeScreen extends ConsumerWidget {
           ),
         ),
         SizedBox(
-          height: 260,
+          height: sectionHeight,
           child: asyncData.when(
             data: (animeList) {
               return ListView.builder(
@@ -86,6 +92,8 @@ class HomeScreen extends ConsumerWidget {
                   return AnimePosterCard(
                     anime: anime,
                     heroTagContext: heroContext,
+                    fixedWidth: cardWidth,
+                    margin: const EdgeInsets.only(right: 12),
                   );
                 },
               );
@@ -96,29 +104,30 @@ class HomeScreen extends ConsumerWidget {
               itemCount: 5,
               itemBuilder: (context, index) {
                 return Container(
-                  width: 120,
+                  width: cardWidth,
                   margin: const EdgeInsets.only(right: 12),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Container(
-                        height: 180,
-                        width: 120,
-                        decoration: BoxDecoration(
-                          color: const Color(0xFF2B2D42),
-                          borderRadius: BorderRadius.circular(8),
+                      AspectRatio(
+                        aspectRatio: 0.66,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: const Color(0xFF2B2D42),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
                         ),
                       ),
                       const SizedBox(height: 8),
                       Container(
                         height: 14,
-                        width: 100,
+                        width: cardWidth * 0.8,
                         color: const Color(0xFF2B2D42),
                       ),
                       const SizedBox(height: 4),
                       Container(
                         height: 12,
-                        width: 40,
+                        width: cardWidth * 0.4,
                         color: const Color(0xFF2B2D42),
                       ),
                     ],

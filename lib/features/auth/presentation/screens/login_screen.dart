@@ -1,9 +1,7 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:url_launcher/url_launcher.dart';
 
-import 'providers/auth_providers.dart';
+import 'package:aniclient/features/auth/presentation/providers/auth_providers.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
@@ -72,10 +70,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             const SizedBox(height: 16),
             TextButton(
               onPressed: () {
-                // Bypass login, though this client focuses on authenticated features
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text("Continuing as Guest (Limited Features)")),
-                );
+                ref.read(authProvider.notifier).continueAsGuest();
               },
               child: const Text(
                 "Continue as Guest",

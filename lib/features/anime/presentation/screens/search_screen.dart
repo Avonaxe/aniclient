@@ -77,28 +77,44 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                     children: [
                       ActionChip(
                         label: const Text('Format'),
-                        onPressed: () {}, // To be implemented
+                        onPressed: () {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text("Format filters coming soon!")),
+                          );
+                        },
                         backgroundColor: const Color(0xFF2B2D42),
                         side: BorderSide.none,
                       ),
                       const SizedBox(width: 8),
                       ActionChip(
                         label: const Text('Status'),
-                        onPressed: () {}, // To be implemented
+                        onPressed: () {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text("Status filters coming soon!")),
+                          );
+                        },
                         backgroundColor: const Color(0xFF2B2D42),
                         side: BorderSide.none,
                       ),
                       const SizedBox(width: 8),
                       ActionChip(
                         label: const Text('Genre'),
-                        onPressed: () {}, // To be implemented
+                        onPressed: () {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text("Genre filters coming soon!")),
+                          );
+                        },
                         backgroundColor: const Color(0xFF2B2D42),
                         side: BorderSide.none,
                       ),
                       const SizedBox(width: 8),
                       ActionChip(
                         label: const Text('Sort'),
-                        onPressed: () {}, // To be implemented
+                        onPressed: () {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text("Sort filters coming soon!")),
+                          );
+                        },
                         backgroundColor: const Color(0xFF2B2D42),
                         side: BorderSide.none,
                       ),
@@ -136,9 +152,9 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                           }
                           return GridView.builder(
                             padding: const EdgeInsets.all(16),
-                            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 3,
-                              childAspectRatio: 0.55,
+                            gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                              maxCrossAxisExtent: 140,
+                              childAspectRatio: 0.42, // Adjusted for larger font scales
                               crossAxisSpacing: 10,
                               mainAxisSpacing: 16,
                             ),

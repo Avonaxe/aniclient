@@ -43,6 +43,7 @@ dependencies:
   shimmer: ^3.0.0
   shared_preferences: ^2.5.4
   app_links: ^7.0.0
+  flutter_web_auth_2: ^5.0.1
 
 dev_dependencies:
   flutter_test:

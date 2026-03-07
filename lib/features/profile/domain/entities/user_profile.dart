@@ -17,12 +17,12 @@ class UserProfile {
 
   factory UserProfile.fromJson(Map<String, dynamic> json) {
     return UserProfile(
-      id: json['id'],
-      name: json['name'] ?? '',
-      avatarUrl: json['avatar']['large'] ?? '',
-      bannerUrl: json['bannerImage'] ?? '',
-      totalAnimeWatched: json['statistics']?['anime']?['count'] ?? 0,
-      daysWatched: (json['statistics']?['anime']?['minutesWatched'] ?? 0) ~/ 1440,
+      id: json['id'] as int,
+      name: (json['name'] ?? '') as String,
+      avatarUrl: (json['avatar']?['large'] ?? '') as String,
+      bannerUrl: (json['bannerImage'] ?? '') as String,
+      totalAnimeWatched: (json['statistics']?['anime']?['count'] ?? 0) as int,
+      daysWatched: ((json['statistics']?['anime']?['minutesWatched'] ?? 0) as int) ~/ 1440,
     );
   }
 }

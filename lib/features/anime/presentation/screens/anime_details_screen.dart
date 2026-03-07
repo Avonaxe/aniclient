@@ -150,6 +150,10 @@ class AnimeDetailsScreen extends ConsumerWidget {
                               )).toList(),
                         ),
                       const SizedBox(height: 24),
+                      Row(
+                        children: [
+                          const Icon(Icons.star, color: Colors.amber, size: 20),
+                          const SizedBox(width: 4),
                           Text(
                             "${anime.averageScore ?? 'N/A'}",
                             style: const TextStyle(
@@ -168,9 +172,6 @@ class AnimeDetailsScreen extends ConsumerWidget {
                           ),
                         ],
                       ),
-                      const SizedBox(height: 24),
-                      const Text(
-                      // Synopsis
                       const SizedBox(height: 16),
                       const Text(
                         "Synopsis",
@@ -187,7 +188,7 @@ class AnimeDetailsScreen extends ConsumerWidget {
                             padding: HtmlPaddings.zero,
                             fontSize: FontSize(15),
                             lineHeight: LineHeight.em(1.5),
-                            color: const Color(0xFFA0B1C5),
+                            color: Color(0xFFA0B1C5),
                           ),
                         },
                       ),
@@ -281,7 +282,7 @@ class AnimeDetailsScreen extends ConsumerWidget {
                         ),
                         const SizedBox(height: 12),
                         SizedBox(
-                          height: 250,
+                          height: 280, // Increased height for text scaling
                           child: ListView.builder(
                             scrollDirection: Axis.horizontal,
                             itemCount: anime.recommendations.length,
@@ -290,6 +291,8 @@ class AnimeDetailsScreen extends ConsumerWidget {
                               return AnimePosterCard(
                                 anime: recAnime,
                                 heroTagContext: 'rec_details_${anime.id}',
+                                fixedWidth: 120,
+                                margin: const EdgeInsets.only(right: 12),
                               );
                             },
                           ),
@@ -304,10 +307,8 @@ class AnimeDetailsScreen extends ConsumerWidget {
             ],
           );
         },
-
-        loading: () => const Scaffold(body: Center(child: CircularProgressIndicator())),
-
-        error: (error, stack) => Scaffold(body: Center(child: Text("Error: $error"))),
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (error, stack) => Center(child: Text("Error: $error")),
       ),
     );
   }

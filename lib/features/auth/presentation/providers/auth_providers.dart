@@ -1,15 +1,18 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../data/repositories/auth_repository.dart';
+import 'package:aniclient/features/auth/data/repositories/auth_repository.dart';
 
 final authRepositoryProvider = Provider<AuthRepository>((ref) {
   return AuthRepository();
 });
 
-class AuthNotifier extends StateNotifier<bool> {
-  final AuthRepository _repository;
+class AuthNotifier extends Notifier<bool> {
+  late AuthRepository _repository;
 
-  AuthNotifier(this._repository) : super(false) {
+  @override
+  bool build() {
+    _repository = ref.watch(authRepositoryProvider);
     _checkStatus();
+    return false; // Initial state while checking
   }
 
   Future<void> _checkStatus() async {
@@ -19,12 +22,14 @@ class AuthNotifier extends StateNotifier<bool> {
 
   Future<void> login() async {
     await _repository.login();
-    // The redirect will hit AndroidManifest/Info.plist intents and reopen the app.
-    // The main.dart or a global listener will intercept the URI to save the token.
+  }
+
+  void continueAsGuest() {
+    state = true;
   }
 
   Future<void> saveTokenFromUri(Uri uri) async {
-    final fragment = uri.fragment; // AniList returns the token in the URL fragment (#access_token=...)
+    final fragment = uri.fragment;
     if (fragment.isNotEmpty) {
       final params = Uri.splitQueryString(fragment);
       final token = params['access_token'];
@@ -41,7 +46,6 @@ class AuthNotifier extends StateNotifier<bool> {
   }
 }
 
-final authProvider = StateNotifierProvider<AuthNotifier, bool>((ref) {
-  final repository = ref.watch(authRepositoryProvider);
-  return AuthNotifier(repository);
+final authProvider = NotifierProvider<AuthNotifier, bool>(() {
+  return AuthNotifier();
 });

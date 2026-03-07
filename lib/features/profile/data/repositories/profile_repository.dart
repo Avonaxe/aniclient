@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../../core/network/graphql_client.dart';
-import '../domain/entities/user_profile.dart';
+import 'package:aniclient/core/network/graphql_client.dart';
+import 'package:aniclient/features/profile/domain/entities/user_profile.dart';
 
 class ProfileRepository {
   final GraphQLClient _client = GraphQLClient();

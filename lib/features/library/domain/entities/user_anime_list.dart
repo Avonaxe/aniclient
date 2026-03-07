@@ -1,4 +1,4 @@
-import '../../anime/domain/entities/anime.dart';
+import 'package:aniclient/features/anime/domain/entities/anime.dart';
 
 class AnimeListEntry {
   final int id;

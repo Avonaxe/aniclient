@@ -1,8 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../../core/network/graphql_client.dart';
-import '../../../profile/data/repositories/profile_repository.dart';
-import '../../../anime/data/models/anime_model.dart';
-import '../domain/entities/user_anime_list.dart';
+import 'package:aniclient/core/network/graphql_client.dart';
+import 'package:aniclient/features/profile/data/repositories/profile_repository.dart';
+import 'package:aniclient/features/anime/data/models/anime_model.dart';
+import 'package:aniclient/features/library/domain/entities/user_anime_list.dart';
 
 class LibraryRepository {
   final GraphQLClient _client = GraphQLClient();
