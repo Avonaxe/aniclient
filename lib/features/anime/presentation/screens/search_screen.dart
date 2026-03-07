@@ -53,20 +53,59 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
         children: [
           Padding(
             padding: const EdgeInsets.all(16),
-            child: TextField(
-              autofocus: true,
-              decoration: InputDecoration(
-                hintText: "Search anime...",
-                prefixIcon: const Icon(Icons.search),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
+            child: Column(
+              children: [
+                TextField(
+                  autofocus: true,
+                  decoration: InputDecoration(
+                    hintText: "Search anime...",
+                    prefixIcon: const Icon(Icons.search),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 14,
+                    ),
+                  ),
+                  onChanged: _onSearchChanged,
                 ),
-                contentPadding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 14,
+                const SizedBox(height: 12),
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: [
+                      ActionChip(
+                        label: const Text('Format'),
+                        onPressed: () {}, // To be implemented
+                        backgroundColor: const Color(0xFF2B2D42),
+                        side: BorderSide.none,
+                      ),
+                      const SizedBox(width: 8),
+                      ActionChip(
+                        label: const Text('Status'),
+                        onPressed: () {}, // To be implemented
+                        backgroundColor: const Color(0xFF2B2D42),
+                        side: BorderSide.none,
+                      ),
+                      const SizedBox(width: 8),
+                      ActionChip(
+                        label: const Text('Genre'),
+                        onPressed: () {}, // To be implemented
+                        backgroundColor: const Color(0xFF2B2D42),
+                        side: BorderSide.none,
+                      ),
+                      const SizedBox(width: 8),
+                      ActionChip(
+                        label: const Text('Sort'),
+                        onPressed: () {}, // To be implemented
+                        backgroundColor: const Color(0xFF2B2D42),
+                        side: BorderSide.none,
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              onChanged: _onSearchChanged,
+              ],
             ),
           ),
           Expanded(
