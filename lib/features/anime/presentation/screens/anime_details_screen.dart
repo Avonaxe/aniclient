@@ -7,8 +7,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class AnimeDetailsScreen extends ConsumerWidget {
   final int animeId;
+  final String heroTagContext;
 
-  const AnimeDetailsScreen({super.key, required this.animeId});
+  const AnimeDetailsScreen({
+    super.key, 
+    required this.animeId,
+    required this.heroTagContext,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -22,7 +27,15 @@ class AnimeDetailsScreen extends ConsumerWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Image.network(anime.coverImage),
+                Hero(
+                  tag: 'anime_poster_${anime.id}_$heroTagContext',
+                  child: Image.network(
+                    anime.coverImage,
+                    width: double.infinity,
+                    height: 300,
+                    fit: BoxFit.cover,
+                  ),
+                ),
 
                 Padding(
                   padding: const EdgeInsets.all(16),
